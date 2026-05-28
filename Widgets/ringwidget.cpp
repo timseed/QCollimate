@@ -1,5 +1,9 @@
 #include "ringwidget.h"
+
+#ifdef UI_DEBUG
 #include "gridlayoutdebugger.h"
+#endif
+
 
 RingWidget::RingWidget(QWidget *parent)
     : QWidget(parent)
@@ -16,8 +20,11 @@ RingWidget::RingWidget(QWidget *parent)
   */
     setAttribute(Qt::WA_StyledBackground, true);
 
-
+    /* This allows you to see the Grid Placement of the items.
+     * It is very useful when trying to compress a UI
+     */
+#ifdef UI_DEBUG
     auto debugger = new GridLayoutDebugger(this->gridLayout);
     debugger->enable(true);
-
+#endif
 }
