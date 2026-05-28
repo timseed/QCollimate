@@ -2,7 +2,7 @@
 #define RINGWIDGET_H
 
 #include "ui_ringwidget.h"
-
+#include <QFrame>
 class RingWidget : public QWidget, private Ui::RingWidget
 {
     Q_OBJECT
