@@ -2,6 +2,7 @@
 #define COLVIEW_H
 
 #include "ui_colview.h"
+#include <QPermissions>
 #include <QVideoWidget>
 #include <QCamera>
 #include <QMediaDevices>
@@ -12,6 +13,8 @@ class ColView : public QWidget, private Ui::ColView
 
 public:
     explicit ColView(QWidget *parent = nullptr);
+    bool connect_camera_granted();
+    bool CameraPermission();
     QVideoWidget *video;
     QCamera *camera;
     QMediaCaptureSession *captureSession;

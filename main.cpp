@@ -1,21 +1,14 @@
 #include "mainwindow.h"
-
+#include <QDebug>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QPermissions>
-
+#include <QThread>
 int main(int argc, char *argv[]) {
+    qDebug() << "QCollimate starting";
     QApplication a(argc, argv);
-// We tried to do this in the Info.plist - but that was not enough.
-    qApp->requestPermission(
-        QCameraPermission{}, [](const QPermission &permission) {
-            if (permission.status() == Qt::PermissionStatus::Granted) {
-                qDebug() << "Camera granted";
-            } else {
-                qDebug() << "Camera denied";
-            }
-        });
-    MainWindow w;
-    w.show();
+    MainWindow *w = new MainWindow();
+    w->show();
     return a.exec();
+
 }
