@@ -1,50 +1,80 @@
 #include "colview.h"
 
-ColView::ColView(QWidget *parent)
-    : QWidget(parent)
-{
-    setupUi(this);
-    CameraPermission();
+ColView::ColView(QWidget *parent) : QWidget(parent) {
+  setupUi(this);
+  CameraPermission();
 }
 
-bool ColView::connect_camera_granted()
-{
-    video = new QVideoWidget(w_video);
-    video->show();
-    video->setStyleSheet("background:red;");
+bool ColView::connect_camera_granted() {
+  qDebug() << "Create a Layout ";
+  // if (ui->frame_vid->layout()) {
+  //   delete ui->frame_vid->layout();
+  //   qDebug() << "Deleted existing layout on frame_vid";
+  // }
+  //QLayout *layout =ui->frame_vid->layout();
+  //qDebug() << "created Layout ";
 
-    // 1. Create the main window and video widget
-    video->resize(480, 480);
-    video->showMaximized();
-    video->show();
+  // 1. Set up the Graphics Scene and View
+  m_scene = new QGraphicsScene(this);
+  m_view = new QGraphicsView(m_scene, this);
+  qDebug() << "try and add m_view to layout";
 
-    // 2. Access the default system camera
-    qDebug() << "Trying to use "<< QMediaDevices::defaultVideoInput().description();
-    camera = new QCamera(QMediaDevices::defaultVideoInput());
+  frame_video->layout()->addWidget(m_view);
+  qDebug() << "Added view to the layout";
+  //  ui->frame_vid->setLayout(layout);
+  qDebug() << "layout placed on form ";
 
-    // 3. Create the media session to link camera and output
-    captureSession = new QMediaCaptureSession();
-    captureSession->setCamera(camera);
-    captureSession->setVideoOutput(video);
+  //  resize(800, 600);
+  // 2. Setup Camera
+  qDebug() << "Trying to use... "
+           << QMediaDevices::defaultVideoInput().description();
+  m_camera = new QCamera(QMediaDevices::defaultVideoInput());
+  m_captureSession = new QMediaCaptureSession(this);
 
-    // 4. Start the camera feed
-    camera->start();
-    return true;
+  // 3. Connect the pipeline
+  // Create the Video Item and add it to the scene
+  m_videoItem = new QGraphicsVideoItem();
+  m_scene->addItem(m_videoItem);
+  // Optional: Give the video item a fixed size so the scene knows how big it is
+  m_videoItem->setSize(QSizeF(640, 480));
+
+  // 4. Connect the pipeline
+  m_captureSession->setCamera(m_camera);
+  // Note: We use setVideoOutput just like before, but pass the graphics item
+  m_captureSession->setVideoOutput(m_videoItem);
+  //================= Overlay Section Stars ========================
+  // 5. Create and overlay the rectangle
+  // Parameters: x, y, width, height
+  QGraphicsRectItem *rectItem = new QGraphicsRectItem(100, 100, 200, 150);
+
+  // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
+  QPen redPen(Qt::red);
+  redPen.setWidth(3);
+  rectItem->setPen(redPen);
+
+  // CRITICAL: Ensure the rectangle renders on top of the video
+  // The default Z-value is 0. Setting it to 1 puts it above the video item.
+  rectItem->setZValue(1);
+  //================= Overlay Section Ends ========================
+  m_scene->addItem(rectItem);
+  // 4. Start the camera feed
+  qDebug() << "About to start camera";
+  m_camera->start();
+  qDebug() << "Camera started";
+  return true;
 }
 
-bool ColView::CameraPermission()
-{
-    QCameraPermission cameraPermission;
-    switch (qApp->checkPermission(cameraPermission)) {
-    case Qt::PermissionStatus::Undetermined:
-        qApp->requestPermission(cameraPermission, this,
-                                &ColView::CameraPermission);
-        return false;
-    case Qt::PermissionStatus::Denied:
-        qDebug() << "Permission denied";
-        return false;
-    case Qt::PermissionStatus::Granted:
-        return connect_camera_granted();
-    }
-    return true;
+bool ColView::CameraPermission() {
+  QCameraPermission cameraPermission;
+  switch (qApp->checkPermission(cameraPermission)) {
+  case Qt::PermissionStatus::Undetermined:
+    qApp->requestPermission(cameraPermission, this, &ColView::CameraPermission);
+    return false;
+  case Qt::PermissionStatus::Denied:
+    qDebug() << "Permission denied";
+    return false;
+  case Qt::PermissionStatus::Granted:
+    return connect_camera_granted();
+  }
+  return true;
 }
