@@ -43,13 +43,13 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="RingWidget" name="widget" native="true"/>
+       <widget class="RingWidget" name="rw_1" native="true"/>
       </item>
       <item>
-       <widget class="RingWidget" name="widget_2" native="true"/>
+       <widget class="RingWidget" name="rw_2" native="true"/>
       </item>
       <item>
-       <widget class="RingWidget" name="widget_3" native="true"/>
+       <widget class="RingWidget" name="rw_3" native="true"/>
       </item>
      </layout>
     </widget>

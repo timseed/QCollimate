@@ -2,17 +2,15 @@
 
 ColView::ColView(QWidget *parent) : QWidget(parent) {
   setupUi(this);
+  // We need to set the Ring Widget Id's
+  rw_1->setId(0);
+  rw_2->setId(1);
+  rw_3->setId(2);
+
   CameraPermission();
 }
 
 bool ColView::connect_camera_granted() {
-  qDebug() << "Create a Layout ";
-  // if (ui->frame_vid->layout()) {
-  //   delete ui->frame_vid->layout();
-  //   qDebug() << "Deleted existing layout on frame_vid";
-  // }
-  //QLayout *layout =ui->frame_vid->layout();
-  //qDebug() << "created Layout ";
 
   // 1. Set up the Graphics Scene and View
   m_scene = new QGraphicsScene(this);
