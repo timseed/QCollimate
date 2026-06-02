@@ -2,17 +2,22 @@
 
 ColView::ColView(QWidget *parent) : QWidget(parent) {
   setupUi(this);
+    // We need to wire up the Signal from the 3 Ring Widgets
+    // These need to trigger a method here
+    connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+    connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+    connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+  // Now set the Diameter and Width
+  rw_1->gui_start_values(80,10);
+  rw_2->gui_start_values(50,7);
+  rw_3->gui_start_values(30,3);
   // We need to set the Ring Widget Id's
   rw_1->setId(0);
   rw_2->setId(1);
   rw_3->setId(2);
-  // Clear the hash data is stored in
-    _rings.clear();
-  // We need to wire up the Signal from the 3 Ring Widgets
-  // These need to trigger a method here
-  connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
-  connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
-  connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+
+
+
   CameraPermission();
 }
 
@@ -47,20 +52,39 @@ bool ColView::connect_camera_granted() {
   // Note: We use setVideoOutput just like before, but pass the graphics item
   m_captureSession->setVideoOutput(m_videoItem);
   //================= Overlay Section Stars ========================
-  // 5. Create and overlay the rectangle
-  // Parameters: x, y, width, height
-  QGraphicsRectItem *rectItem = new QGraphicsRectItem(100, 100, 200, 150);
+  // Use the _ring hash if object is active
+  for (auto [key, value] : _rings.asKeyValueRange())
+  {
+      //if (value.b_active)
+      {
+          QGraphicsEllipseItem *elipseItem = new QGraphicsEllipseItem(m_videoItem->size().width()/2-value.diameter/2,
+                                                                      m_videoItem->size().height()/2-value.diameter/2,
+                                                                      value.diameter,
+                                                                      value.diameter);
+          // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
+          QPen redPen(Qt::red);
+          redPen.setWidth(value.thickness);
+          elipseItem->setPen(redPen);
 
-  // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
-  QPen redPen(Qt::red);
-  redPen.setWidth(3);
-  rectItem->setPen(redPen);
+
+          elipseItem->setZValue(1);
+          m_scene->addItem(elipseItem);
+          qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
+              m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
+      }
+  }
+  // QGraphicsRectItem *rectItem = new QGraphicsRectItem(100, 100, 200, 150);
+
+  // // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
+  // QPen redPen(Qt::red);
+  // redPen.setWidth(3);
+  // rectItem->setPen(redPen);
 
   // CRITICAL: Ensure the rectangle renders on top of the video
   // The default Z-value is 0. Setting it to 1 puts it above the video item.
-  rectItem->setZValue(1);
+  //rectItem->setZValue(1);
   //================= Overlay Section Ends ========================
-  m_scene->addItem(rectItem);
+  //m_scene->addItem(rectItem);
   // 4. Start the camera feed
   qDebug() << "About to start camera";
   m_camera->start();
@@ -89,21 +113,14 @@ void ColView::RingChanged(RingDef rd)
      * This needs to update the central storage (A Hash) of the Rings.
      */
 {
-    qDebug() << "Got Signal that a ring changed";
-    qDebug() << "Ring Id is "<<rd.id;
+    qDebug() << "Got Signal that a ring changed Ring Id is "<<rd.id;
     if (_rings.contains(rd.id))
     {
         // We have a Definition for this
         // Delete the stored one
-        // Add this new one
         _rings.remove(rd.id);
-        // Now add the passed in data
-        _rings.insert(rd.id,rd);
     }
-    else
-    {
-        // It is not there so add it
-         _rings.insert(rd.id,rd);
-    }
+    // Add data
+    _rings.insert(rd.id,rd);
 
 }

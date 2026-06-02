@@ -55,4 +55,13 @@ void RingWidget::active_changed(Qt::CheckState state)
 void RingWidget::setId(int newId)
 {
     m_id = newId;
+    emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
+}
+
+void RingWidget::gui_start_values(float d, float t)
+{
+    diameter->setValue(d);
+    m_diameter=d;
+    thick->setValue(t);
+    m_thickness=t;
 }

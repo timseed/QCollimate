@@ -20,6 +20,7 @@ class RingWidget : public QWidget, private Ui::RingWidget
 public:
     explicit RingWidget(QWidget *parent = nullptr);
     void setId(int newId);
+    void gui_start_values(float diam, float thick);
 
 public slots:
     void diameter_changed();
