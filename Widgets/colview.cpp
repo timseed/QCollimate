@@ -6,6 +6,11 @@ ColView::ColView(QWidget *parent) : QWidget(parent) {
   rw_1->setId(0);
   rw_2->setId(1);
   rw_3->setId(2);
+  // We need to wire up the Signal from the 3 Ring Widgets
+  // These need to trigger a method here
+  connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+  connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+  connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
 
   CameraPermission();
 }
@@ -75,4 +80,10 @@ bool ColView::CameraPermission() {
     return connect_camera_granted();
   }
   return true;
+}
+
+void ColView::RingChanged(RingDef rd)
+{
+    qDebug() << "Got Signal that a ring changed";
+
 }

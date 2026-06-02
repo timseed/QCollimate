@@ -36,6 +36,8 @@ public:
   QGraphicsView *m_view;
   QGraphicsVideoItem *m_videoItem;
 
+  public slots:
+  void RingChanged(RingDef rd);
 
 };
 

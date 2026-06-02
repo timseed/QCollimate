@@ -5,6 +5,13 @@
 //#include <QFrame>   // For Setting the
 #include <QDebug>
 
+struct RingDef {
+    int id;
+    bool b_active;
+    float diameter;
+    float thickness;
+    QString col;
+};
 
 class RingWidget : public QWidget, private Ui::RingWidget
 {
@@ -20,7 +27,7 @@ public slots:
     void active_changed(Qt::CheckState state);
 
 signals:
-    void RingSize(int id, bool b_active, float diameter, float thickness, QString col="Red");
+    void RingSize(RingDef rd);
 
 private:
     int m_id;  // Used to keep track of which ring is sending the update. This needs to be manually specified.
