@@ -25,7 +25,7 @@ public:
   bool connect_camera_granted();
   bool CameraPermission();
 
-  QGraphicsView *view;
+    QGraphicsView *view;
   // QGraphicsScene *scene;
   QGraphicsProxyWidget *videoProxy;
   //
@@ -35,6 +35,7 @@ public:
   QGraphicsScene *m_scene;
   QGraphicsView *m_view;
   QGraphicsVideoItem *m_videoItem;
+  QHash<int,RingDef> _rings;
 
   public slots:
   void RingChanged(RingDef rd);

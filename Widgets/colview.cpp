@@ -6,12 +6,13 @@ ColView::ColView(QWidget *parent) : QWidget(parent) {
   rw_1->setId(0);
   rw_2->setId(1);
   rw_3->setId(2);
+  // Clear the hash data is stored in
+    _rings.clear();
   // We need to wire up the Signal from the 3 Ring Widgets
   // These need to trigger a method here
   connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
   connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
   connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
-
   CameraPermission();
 }
 
@@ -83,7 +84,26 @@ bool ColView::CameraPermission() {
 }
 
 void ColView::RingChanged(RingDef rd)
+    /**
+     * @brief Handled the Signal indicating something has changed with the Ring parameters.
+     * This needs to update the central storage (A Hash) of the Rings.
+     */
 {
     qDebug() << "Got Signal that a ring changed";
+    qDebug() << "Ring Id is "<<rd.id;
+    if (_rings.contains(rd.id))
+    {
+        // We have a Definition for this
+        // Delete the stored one
+        // Add this new one
+        _rings.remove(rd.id);
+        // Now add the passed in data
+        _rings.insert(rd.id,rd);
+    }
+    else
+    {
+        // It is not there so add it
+         _rings.insert(rd.id,rd);
+    }
 
 }
