@@ -24,6 +24,7 @@ public:
   explicit ColView(QWidget *parent = nullptr);
   bool connect_camera_granted();
   bool CameraPermission();
+  void UpdateScene();
 
     QGraphicsView *view;
   // QGraphicsScene *scene;

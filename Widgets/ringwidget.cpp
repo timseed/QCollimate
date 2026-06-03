@@ -49,6 +49,10 @@ void RingWidget::thick_changed()
 void RingWidget::active_changed(Qt::CheckState state)
 {
     qDebug() << "Active Changed triggered";
+    if (state==Qt::Checked)
+        m_active=true;
+    else
+        m_active=false;
     emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
 }
 

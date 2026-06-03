@@ -2,11 +2,7 @@
 
 ColView::ColView(QWidget *parent) : QWidget(parent) {
   setupUi(this);
-    // We need to wire up the Signal from the 3 Ring Widgets
-    // These need to trigger a method here
-    connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
-    connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
-    connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+
   // Now set the Diameter and Width
   rw_1->gui_start_values(80,10);
   rw_2->gui_start_values(50,7);
@@ -15,9 +11,11 @@ ColView::ColView(QWidget *parent) : QWidget(parent) {
   rw_1->setId(0);
   rw_2->setId(1);
   rw_3->setId(2);
-
-
-
+  // We need to wire up the Signal from the 3 Ring Widgets
+  // These need to trigger a method here
+  connect(rw_1,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+  connect(rw_2,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
+  connect(rw_3,SIGNAL(RingSize(RingDef)),this,SLOT(RingChanged(RingDef)));
   CameraPermission();
 }
 
@@ -53,39 +51,28 @@ bool ColView::connect_camera_granted() {
   m_captureSession->setVideoOutput(m_videoItem);
   //================= Overlay Section Stars ========================
   // Use the _ring hash if object is active
-  for (auto [key, value] : _rings.asKeyValueRange())
-  {
-      //if (value.b_active)
-      {
-          QGraphicsEllipseItem *elipseItem = new QGraphicsEllipseItem(m_videoItem->size().width()/2-value.diameter/2,
-                                                                      m_videoItem->size().height()/2-value.diameter/2,
-                                                                      value.diameter,
-                                                                      value.diameter);
-          // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
-          QPen redPen(Qt::red);
-          redPen.setWidth(value.thickness);
-          elipseItem->setPen(redPen);
+
+  // for (auto [key, value] : _rings.asKeyValueRange())
+  // {
+  //     //if (value.b_active)
+  //     {
+  //         QGraphicsEllipseItem *elipseItem = new QGraphicsEllipseItem(m_videoItem->size().width()/2-value.diameter/2,
+  //                                                                     m_videoItem->size().height()/2-value.diameter/2,
+  //                                                                     value.diameter,
+  //                                                                     value.diameter);
+  //         // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
+  //         QPen redPen(Qt::red);
+  //         redPen.setWidth(value.thickness);
+  //         elipseItem->setPen(redPen);
 
 
-          elipseItem->setZValue(1);
-          m_scene->addItem(elipseItem);
-          qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
-              m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
-      }
-  }
-  // QGraphicsRectItem *rectItem = new QGraphicsRectItem(100, 100, 200, 150);
+  //         elipseItem->setZValue(1);
+  //         m_scene->addItem(elipseItem);
+  //         qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
+  //             m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
+  //     }
+  // }
 
-  // // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
-  // QPen redPen(Qt::red);
-  // redPen.setWidth(3);
-  // rectItem->setPen(redPen);
-
-  // CRITICAL: Ensure the rectangle renders on top of the video
-  // The default Z-value is 0. Setting it to 1 puts it above the video item.
-  //rectItem->setZValue(1);
-  //================= Overlay Section Ends ========================
-  //m_scene->addItem(rectItem);
-  // 4. Start the camera feed
   qDebug() << "About to start camera";
   m_camera->start();
   qDebug() << "Camera started";
@@ -107,6 +94,37 @@ bool ColView::CameraPermission() {
   return true;
 }
 
+void ColView::UpdateScene()
+{
+    qDebug() <<" Entering UpdateScene";
+    QGraphicsScene *oldScene = m_view->scene();
+    QGraphicsScene *newScene = new QGraphicsScene(this); //m_scene->addItem(m_videoItem);
+    qDebug() << "There are currently "<<m_scene->items().count()<<" Items on the m_scene";
+    qDebug() << "There are currently "<<newScene->items().count()<<" Items on the newScene";
+    for (auto [key, value] : _rings.asKeyValueRange())
+    {
+        if (value.b_active)
+        {
+            qDebug() <<"Adding Ring id: "<<key;
+            QGraphicsEllipseItem *elipseItem = new QGraphicsEllipseItem(m_videoItem->size().width()/2-value.diameter/2,
+                                                                        m_videoItem->size().height()/2-value.diameter/2,
+                                                                        value.diameter,
+                                                                        value.diameter);
+            // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
+            QPen redPen(Qt::red);
+            redPen.setWidth(value.thickness);
+            elipseItem->setPen(redPen);
+
+
+            elipseItem->setZValue(1);
+            m_scene->addItem(elipseItem);
+            qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
+                m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
+        }
+    }
+    //m_view->setScene(newScene);
+}
+
 void ColView::RingChanged(RingDef rd)
     /**
      * @brief Handled the Signal indicating something has changed with the Ring parameters.
@@ -122,5 +140,7 @@ void ColView::RingChanged(RingDef rd)
     }
     // Add data
     _rings.insert(rd.id,rd);
+
+    UpdateScene();
 
 }
