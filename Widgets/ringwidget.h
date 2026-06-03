@@ -25,6 +25,8 @@ public:
 public slots:
     void diameter_changed();
     void thick_changed();
+    void diameter_changed(int newvalue);
+    void thick_changed(int newvalue);
     void active_changed(Qt::CheckState state);
     void dump();
 signals:

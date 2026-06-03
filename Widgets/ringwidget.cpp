@@ -11,9 +11,15 @@ RingWidget::RingWidget(QWidget *parent)
     setupUi(this);
 
     /* Signal and Slot time */
-    connect(diameter,SIGNAL(sliderReleased()),this,SLOT(diameter_changed()));
-    connect(thick, SIGNAL(sliderReleased()),this,SLOT(thick_changed()));
+//    connect(diameter,SIGNAL(sliderReleased()),this,SLOT(diameter_changed()));
+//    connect(thick, SIGNAL(sliderReleased()),this,SLOT(thick_changed()));
+//    connect(active, SIGNAL(checkStateChanged(Qt::CheckState)),this,SLOT(active_changed(Qt::CheckState)));
+
+    connect(diameter,SIGNAL(valueChanged(int)),this,SLOT(diameter_changed(int)));
+    connect(thick, SIGNAL(valueChanged(int)),this,SLOT(thick_changed(int)));
     connect(active, SIGNAL(checkStateChanged(Qt::CheckState)),this,SLOT(active_changed(Qt::CheckState)));
+
+
     this->setStyleSheet(
         "background-color: light-red;"
         );
@@ -48,6 +54,20 @@ void RingWidget::thick_changed()
     m_thickness = thick->value();
     lb_width->setText(QString("width: %1").arg(thick->value()));
     emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
+}
+
+
+void RingWidget::diameter_changed(int newvalue)
+{
+    qDebug() << "Diameter Changed triggered";
+    m_diameter = newvalue;
+    lb_diam->setText(QString("width: %1").arg(diameter->value()));
+    emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
+}
+
+void RingWidget::thick_changed(int newvalue)
+{
+    thick_changed();
 }
 
 void RingWidget::active_changed(Qt::CheckState state)
