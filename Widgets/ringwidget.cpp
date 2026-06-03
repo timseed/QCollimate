@@ -79,4 +79,6 @@ void RingWidget::gui_start_values(float d, float t)
     m_diameter=d;
     thick->setValue(t);
     m_thickness=t;
+    lb_width->setText(QString("width: %1").arg(thick->value()));
+    lb_diam->setText(QString("width: %1").arg(diameter->value()));
 }
