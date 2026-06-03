@@ -27,7 +27,7 @@
       <number>1</number>
      </property>
      <property name="maximum">
-      <number>20</number>
+      <number>30</number>
      </property>
      <property name="orientation">
       <enum>Qt::Orientation::Vertical</enum>
@@ -43,6 +43,9 @@
    </item>
    <item row="1" column="0">
     <widget class="QSlider" name="diameter">
+     <property name="maximum">
+      <number>500</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>

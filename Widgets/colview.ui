@@ -7,22 +7,34 @@
     <x>0</x>
     <y>0</y>
     <width>615</width>
-    <height>320</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout" columnstretch="7,3">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="7,0">
    <item row="1" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>TextLabel</string>
+    <widget class="QFrame" name="frame_video">
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QFrame" name="frame">
+    <widget class="QFrame" name="frame_widgets">
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -31,13 +43,13 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="RingWidget" name="widget" native="true"/>
+       <widget class="RingWidget" name="rw_1" native="true"/>
       </item>
       <item>
-       <widget class="RingWidget" name="widget_2" native="true"/>
+       <widget class="RingWidget" name="rw_2" native="true"/>
       </item>
       <item>
-       <widget class="RingWidget" name="widget_3" native="true"/>
+       <widget class="RingWidget" name="rw_3" native="true"/>
       </item>
      </layout>
     </widget>
