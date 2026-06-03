@@ -49,31 +49,7 @@ bool ColView::connect_camera_granted() {
   m_captureSession->setCamera(m_camera);
   // Note: We use setVideoOutput just like before, but pass the graphics item
   m_captureSession->setVideoOutput(m_videoItem);
-  //================= Overlay Section Stars ========================
-  // Use the _ring hash if object is active
-
-  // for (auto [key, value] : _rings.asKeyValueRange())
-  // {
-  //     //if (value.b_active)
-  //     {
-  //         QGraphicsEllipseItem *elipseItem = new QGraphicsEllipseItem(m_videoItem->size().width()/2-value.diameter/2,
-  //                                                                     m_videoItem->size().height()/2-value.diameter/2,
-  //                                                                     value.diameter,
-  //                                                                     value.diameter);
-  //         // Style the rectangle (e.g., a 3-pixel thick red outline, no fill)
-  //         QPen redPen(Qt::red);
-  //         redPen.setWidth(value.thickness);
-  //         elipseItem->setPen(redPen);
-
-
-  //         elipseItem->setZValue(1);
-  //         m_scene->addItem(elipseItem);
-  //         qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
-  //             m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
-  //     }
-  // }
-
-  qDebug() << "About to start camera";
+  qDebug() << "About to start camera. Overlay Handled on receipt of a Signal.";
   m_camera->start();
   qDebug() << "Camera started";
   return true;
@@ -99,6 +75,7 @@ void ColView::UpdateScene()
     qDebug() <<" Entering UpdateScene";
     QGraphicsScene *oldScene = m_view->scene();
     QGraphicsScene *newScene = new QGraphicsScene(this); //m_scene->addItem(m_videoItem);
+    newScene->addItem(m_videoItem);
     qDebug() << "There are currently "<<m_scene->items().count()<<" Items on the m_scene";
     qDebug() << "There are currently "<<newScene->items().count()<<" Items on the newScene";
     for (auto [key, value] : _rings.asKeyValueRange())
@@ -117,12 +94,12 @@ void ColView::UpdateScene()
 
 
             elipseItem->setZValue(1);
-            m_scene->addItem(elipseItem);
+            newScene->addItem(elipseItem);
             qDebug() << "Added Elipse X:"<<m_videoItem->size().width()/2<<" Y:"<<
                 m_videoItem->size().height()/2 << " H/W: "<<value.diameter;
         }
     }
-    //m_view->setScene(newScene);
+    m_view->setScene(newScene);
 }
 
 void ColView::RingChanged(RingDef rd)
