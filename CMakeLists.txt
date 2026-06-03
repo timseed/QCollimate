@@ -9,9 +9,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt5 Qt6 REQUIRED)
+find_package(QT NAMES Qt6 REQUIRED)
 message(status "QT Version Major is ${QT_VERSION_MAJOR}")
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets UiTools MultimediaWidgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets MultimediaWidgets)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -55,7 +55,7 @@ else()
   endif()
 endif()
 
-target_link_libraries(QCollimate PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::UiTools Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::MultimediaWidgets)
+target_link_libraries(QCollimate PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::MultimediaWidgets)
 set_target_properties(QCollimate PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
 )
