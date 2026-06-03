@@ -26,7 +26,7 @@ public slots:
     void diameter_changed();
     void thick_changed();
     void active_changed(Qt::CheckState state);
-
+    void dump();
 signals:
     void RingSize(RingDef rd);
 

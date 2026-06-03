@@ -4,9 +4,9 @@ ColView::ColView(QWidget *parent) : QWidget(parent) {
   setupUi(this);
 
   // Now set the Diameter and Width
-  rw_1->gui_start_values(80,10);
-  rw_2->gui_start_values(50,7);
-  rw_3->gui_start_values(30,3);
+  rw_1->gui_start_values(250,25);
+  rw_2->gui_start_values(150,15);
+  rw_3->gui_start_values(100,10);
   // We need to set the Ring Widget Id's
   rw_1->setId(0);
   rw_2->setId(1);
@@ -117,6 +117,10 @@ void ColView::RingChanged(RingDef rd)
     }
     // Add data
     _rings.insert(rd.id,rd);
+
+    rw_1->dump();
+    rw_2->dump();
+    rw_3->dump();
 
     UpdateScene();
 

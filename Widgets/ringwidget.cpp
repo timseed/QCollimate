@@ -37,12 +37,16 @@ RingWidget::RingWidget(QWidget *parent)
 void RingWidget::diameter_changed()
 {
     qDebug() << "Diameter Changed triggered";
+    m_diameter = diameter->value();
+    lb_diam->setText(QString("width: %1").arg(diameter->value()));
     emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
 }
 
 void RingWidget::thick_changed()
 {
     qDebug() << "Thickness Changed triggered";
+    m_thickness = thick->value();
+    lb_width->setText(QString("width: %1").arg(thick->value()));
     emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
 }
 
@@ -54,6 +58,13 @@ void RingWidget::active_changed(Qt::CheckState state)
     else
         m_active=false;
     emit RingSize(RingDef{m_id, m_active, m_diameter, m_thickness,m_col});
+}
+
+void RingWidget::dump()
+{
+
+    QString dbg_info = QString("id: %1 active: %2 diam: %3 thick: %4").arg(m_id).arg(m_active).arg(m_diameter).arg(m_thickness);
+    qDebug() << dbg_info;
 }
 
 void RingWidget::setId(int newId)
