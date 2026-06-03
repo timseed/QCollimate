@@ -35,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Info.plist
         Readme.md
         Info.plist
+        documentation/img0.png documentation/img1.png documentation/img2.png
     )
   # Define target properties for Android with Qt 6 as:
   #    set_property(TARGET QCollimate APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

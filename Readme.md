@@ -2,6 +2,10 @@
 
 I thought I would try and write a simple Collumator tool so I can use a cheap SV205 Web-Cam type camera to check the colimination on my GSO 6".
 
+The Colluumation screen looks something like this 
+
+!(./documentation/img2.png)[./documentation/img2.png)
+
 # QT Code
 
 Actually the QT is not as bad as I was thinking, it is just a little trickly to get multiple widgets to compile (use full path,and be careful with Class names).
