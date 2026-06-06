@@ -24,7 +24,6 @@ set(PROJECT_SOURCES
         Widgets/colview.ui
         Widgets/colview.cpp
         Widgets/colview.h
-
 )
 
 qt_add_executable(QCollimate

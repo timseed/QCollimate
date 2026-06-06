@@ -2,7 +2,7 @@
 
 I thought I would try and write a simple Collumator tool so I can use a cheap SV205 Web-Cam type camera to check the colimination on my GSO 6".
 
-The Colluumation screen looks something like this 
+The Collumation screen looks something like this 
 
 ![](./documentation/img1.png)
 
@@ -20,6 +20,11 @@ Please note: **For Mac users** - there is some extra security that needs to be g
 
   - Qt 6 Compiler 
   - cmake needs to be installed 
+
+Build now checked for 
+
+  - Linux (Arch)
+  - Mac 
 
 # Build Process
 
