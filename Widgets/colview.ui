@@ -60,7 +60,7 @@
   <customwidget>
    <class>RingWidget</class>
    <extends>QWidget</extends>
-   <header>/Users/tim/Dev/Qt/QCollimate/Widgets/ringwidget.h</header>
+      <header>Widgets/ringwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

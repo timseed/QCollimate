@@ -27,8 +27,7 @@ set(PROJECT_SOURCES
 
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-  qt_add_executable(QCollimate
+qt_add_executable(QCollimate
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         Widgets/gridlayoutdebugger.h Widgets/gridlayoutdebugger.cpp
@@ -37,24 +36,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         Info.plist
         documentation/img0.png documentation/img1.png documentation/img2.png
     )
-  # Define target properties for Android with Qt 6 as:
-  #    set_property(TARGET QCollimate APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-  #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-  # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-  if(ANDROID)
-    add_library(QCollimate SHARED
-            ${PROJECT_SOURCES}
-        )
-    # Define properties for Android with Qt 5 after find_package() calls as:
-    #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-  else()
-    add_executable(QCollimate
-            ${PROJECT_SOURCES}
-        )
-  endif()
-endif()
-
+#This include is needed for Embedded Widgets that have a relative Path
+#Just adding the CURRENT_SOURCE_DIR was not enough I think due to MOC compiling
+target_include_directories(QCollimate PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Widgets
+)
+message(STATUS "Include Path is ${TARGET_INCLUDE_DIRECTORIES}")
 target_link_libraries(QCollimate PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::MultimediaWidgets)
 set_target_properties(QCollimate PROPERTIES
     MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist

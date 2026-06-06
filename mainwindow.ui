@@ -43,7 +43,7 @@
   <customwidget>
    <class>ColView</class>
    <extends>QWidget</extends>
-   <header>/Users/tim/Dev/Qt/QCollimate/Widgets/colview.h</header>
+      <header>Widgets/colview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
